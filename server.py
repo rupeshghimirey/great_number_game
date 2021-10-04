@@ -10,16 +10,6 @@ app.secret_key = "random key"
 @app.route('/')
 def home():
 
-    # print(session)
-    # if 'counter' in session:
-    #     print('listOfFruits exits!')
-    #     session['counter'] += 1;
-    #     print(session['counter'])
-        
-    # else:
-    #     print("there is no fruits array in session")
-    #     session['anything'] = ['apple', 'bananna']
-    #     session['counter'] = 0;
     return render_template('index.html')
 
 @app.route('/guess', methods = ['POST'] )
@@ -28,7 +18,7 @@ def guessNumber():
     print(request.form)
 
     if 'guessedNum' not in session:
-        randomNum = random.randint(1,101);
+        randomNum = random.randint(1,100);
         session['randomNum'] = randomNum;
 
     session['guessedNum'] = int(request.form['input']);
@@ -39,47 +29,34 @@ def guessNumber():
 @app.route('/answer')
 def answer():
 
+
     guessedNum = session['guessedNum']
     randomNum = session['randomNum']
+    session['showBackButton'] = False
     text = " "
+
+    print(session);
+
+    print(request);
     if(guessedNum < randomNum):
         print("Too Low");
         text += "Too Low!"
+        return render_template('answer.html', answer = text, color = "danger")
     elif(guessedNum > randomNum):
         print("Too High")
         text += "Too High!"
+        return render_template('answer.html', answer = text, color = "danger")
     else:
-        print( str(guessedNum) + "is the Number")
-        text += (str(guessedNum) + " is the Number!")
+        print( str(guessedNum) + "was the Number")
+        text += (str(guessedNum) + " was the Number!")
+        session['showBackButton'] = True
+        return render_template('answer.html', answer = text, color = "success")
 
-    print(session);
-
-    print(request);
-
-    return render_template('answer.html', answer = text)
-
-@app.route('/right-answer')
-def rightAnswer():
-
-    guessedNum = session['guessedNum']
-    randomNum = session['randomNum']
-    text = " "
-    if(guessedNum == randomNum):
-        print( str(guessedNum) + "is the Number")
-        text += (str(guessedNum) + " is the Number!")
-    
-    print(session);
-
-    print(request);
-
-    return render_template('right_answer.html', answer = text)
 
 @app.route("/clear_session")
 def clear_session():
     session.clear()
     return redirect("/")
 
-
-    return render_template('right_answer.html', answer = text)
 if __name__=="__main__":
     app.run(debug=True)

@@ -17,20 +17,27 @@
         <h2 class="text-center">Welcome to the great number game!</h2>
         <p class="text-center">I am thinking of a number between 1 and 100</p>
         <p class="text-center">Take a Guess! </p>
-
-        <div class="answer-box mt-3 mb-3 ">
-            <h4>
+        {% if(session['showBackButton'] == False)%}
+        <div class="answer-box mt-3 mb-3 bg-{{color}}">
+            <h4 >
                 {{answer}}
             </h4>
         </div>
-
         <form class="text-center" action="/guess" method="post">
 
-            <div>                       
+            <div >                       
                 <input class = "col-lg-2 mb-2" type="number" id="replyNumber" min="1" step="1" data-bind="value:replyNumber" name = 'input' required />
             </div>
             <button class="btn btn-primary col-lg-3" type="submit" >Submit</button>
         </form>
+        {%else%}
+        <div class="answer-box mt-3 mb-3 bg-{{color}}">
+            <h4 class="text-danger">
+                <strong>{{answer}}</strong>
+            </h4>
+            <a href="/clear_session" class="btn btn-danger start-over">Start Over</a>
+        </div>
+        {%endif%}
     </div>
 </body>
 
